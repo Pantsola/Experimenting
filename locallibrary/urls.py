@@ -21,20 +21,20 @@ urlpatterns = [
 ]
 
 
-
-# Use include() to add paths from the catalog application 
-from django.urls import include
 from django.urls import path
+from django.contrib import admin
 
-urlpatterns += [
-    path('catalog/', include('catalog.urls')),
+# Use include() to add URLS from the catalog application and authentication system
+from django.urls import include
+
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
 ]
 
 
-#Add URL maps to redirect the base URL to our application
-from django.views.generic import RedirectView
 urlpatterns += [
-    path('', RedirectView.as_view(url='/catalog/', permanent=True)),
+    path('catalog/', include('catalog.urls')),
 ]
 
 
@@ -42,7 +42,15 @@ urlpatterns += [
 from django.conf import settings
 from django.conf.urls.static import static
 
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+urlpatterns+= static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+
+#Add URL maps to redirect the base URL to our application
+from django.views.generic import RedirectView
+urlpatterns += [
+    path('', RedirectView.as_view(url='/catalog/', permanent=True)),
+]
 
 
 
